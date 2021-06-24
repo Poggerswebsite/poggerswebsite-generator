@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Change CWD and clone
+        run: |
+          cd ~
+          git clone https://github.com/poggerswebsite/poggerswebsite.github.io
+          cd poggerswebsite-generator
+      - name: Generate site
+        run: npm start
+      - name: Return to repo
+        run: cd ~/poggerswebsite.github.io
+      - uses: EndBug/add-and-commit@v7
+        with:
+          author_name: Poggerswebsite
+          author_email: poggerswebsite@gmail.com
+          branch: main
+          push: true
+          
